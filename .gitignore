@@ -567,3 +567,6 @@ yarn-error.log
 
 .notes.md
 baseline.json
+ClosedXML.Report/src/ClosedXML.Report.Sample/ClosedXML.Report.Sample/Migrations/ProductContextModelSnapshot.cs
+ClosedXML.Report/src/ClosedXML.Report.Sample/ClosedXML.Report.Sample/Migrations/20200830133455_InitialCreate.Designer.cs
+ClosedXML.Report/src/ClosedXML.Report.Sample/ClosedXML.Report.Sample/Migrations/20200830133455_InitialCreate.cs
