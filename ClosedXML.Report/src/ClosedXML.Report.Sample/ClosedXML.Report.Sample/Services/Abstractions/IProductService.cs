@@ -10,6 +10,8 @@ namespace ClosedXML.Report.Sample.Services.Abstractions
     {
         Task<List<ProductEntity>> GetProductAsync();
 
+        Task<ProductEntity> GetProductAsync(long id);
+
         Task<ProductEntity> AddProductAsync(ProductEntity product);
 
         Task<ProductEntity> UpdateProductAsync(ProductEntity product);

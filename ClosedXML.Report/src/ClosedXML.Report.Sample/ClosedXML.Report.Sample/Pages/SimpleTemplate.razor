@@ -3,6 +3,7 @@
 @using ClosedXML.Report.Sample.Services.Abstractions
 @using ClosedXML.Report.Sample.Entities.Sqlite
 @using ClosedXML.Report.Sample.Models
+
 @inject IProductService productService
 
 <h3>Product List</h3>
@@ -32,7 +33,7 @@ else
                     <td>@product.Price</td>
                     <td>@product.Quantity</td>
                     <td>
-                        <button class="btn btn-info">Export excel</button>
+                        <a class="form-control btn btn-info" href="/download?id=@product.Id" target="_blank">Export excel</a>
                     </td>
                 </tr>
             }
@@ -46,28 +47,5 @@ else
     protected override async Task OnInitializedAsync()
     {
         products = await productService.GetProductAsync();
-    }
-    private async Task ExportExcel(long id)
-    {
-        ProductEntity product = products.Find(f => f.Id == id);
-        if (product != null)
-        {
-            ProductModel productModel = new ProductModel()
-            {
-                Id = product.Id,
-                Code = product.Code,
-                Barcode = product.Barcode,
-                Description = product.Description,
-                Name = product.Name,
-                Price =product.Price,
-                Quantity = product.Quantity
-            };
-            const string outputFile = @".\Output\report.xlsx";
-            var template = new XLTemplate(@".\Templates\report.xlsx");
-            template.AddVariable(productModel);
-            template.Generate();
-            //template.Workbook.
-        }
-
     }
 }

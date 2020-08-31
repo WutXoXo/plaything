@@ -32,6 +32,11 @@ namespace ClosedXML.Report.Sample.Repositories
             return await _context.Product.ToListAsync();
         }
 
+        public async Task<ProductEntity> GetProductAsync(long id)
+        {
+            return await _context.Product.FirstOrDefaultAsync(f => f.Id == id);
+        }
+
         public async Task<ProductEntity> UpdateProductAsync(ProductEntity product)
         {
             throw new NotImplementedException();

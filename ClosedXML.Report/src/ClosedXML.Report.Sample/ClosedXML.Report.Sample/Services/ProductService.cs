@@ -31,6 +31,11 @@ namespace ClosedXML.Report.Sample.Services
             return await _productRepository.GetProductAsync();
         }
 
+        public async Task<ProductEntity> GetProductAsync(long id)
+        {
+            return await _productRepository.GetProductAsync(id);
+        }
+
         public async Task<ProductEntity> UpdateProductAsync(ProductEntity product)
         {
             throw new NotImplementedException();

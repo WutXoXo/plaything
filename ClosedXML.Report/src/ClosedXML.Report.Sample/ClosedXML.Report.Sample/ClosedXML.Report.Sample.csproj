@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\ProductTemplate.xlsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Data\ProductTemplate.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.3" />
     <PackageReference Include="ClosedXML.Report" Version="0.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
