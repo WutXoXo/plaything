@@ -19,36 +19,67 @@ namespace ClosedXML.Report.Sample.Pages
             _productService = productService;
         }
 
-        public async Task<IActionResult> OnGet(long id)
+        public async Task<IActionResult> OnGet(long? id = null)
         {
             byte[] excelBytes = null;
-            ProductEntity product = await _productService.GetProductAsync(id);
-            if (product != null)
+            if (id != null)
             {
-                ProductModel productModel = new ProductModel()
+                ProductEntity product = await _productService.GetProductAsync(id.Value);
+                if (product != null)
                 {
-                    Id = product.Id,
-                    Code = product.Code,
-                    Barcode = product.Barcode,
-                    Description = product.Description,
-                    Name = product.Name,
-                    Price = product.Price,
-                    Quantity = product.Quantity
-                };
-                var template = new XLTemplate(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "ProductTemplate.xlsx"));
-                template.AddVariable("code", product.Code);
-                template.AddVariable("name", product.Barcode);
-                template.AddVariable("price", product.Price);
-                template.AddVariable("quantity", product.Quantity);
-                template.Generate();                
+                    ProductModel productModel = new ProductModel()
+                    {
+                        Id = product.Id,
+                        Code = product.Code,
+                        Barcode = product.Barcode,
+                        Description = product.Description,
+                        Name = product.Name,
+                        Price = product.Price,
+                        Quantity = product.Quantity
+                    };
+                    var template = new XLTemplate(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "ProductTemplate.xlsx"));
+                    template.AddVariable("code", product.Code);
+                    template.AddVariable("name", product.Barcode);
+                    template.AddVariable("price", product.Price);
+                    template.AddVariable("quantity", product.Quantity);
+                    template.Generate();
 
-                using (var stream = new MemoryStream())
-                {
-                    template.Workbook.SaveAs(stream);
-                    excelBytes = stream.ToArray();
-                }                
+                    using (var stream = new MemoryStream())
+                    {
+                        template.Workbook.SaveAs(stream);
+                        excelBytes = stream.ToArray();
+                    }
+                }
+                return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Product.xlsx");
             }
-            return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Product.xlsx");
+            else
+            {
+                List<ProductEntity> products = await _productService.GetProductAsync();
+                if (products != null && products.Count > 0)
+                {
+                    ProductsModel productsModel = new ProductsModel();
+                    productsModel.Item = products.Select(s => new ProductModel()
+                    {
+                        Id = s.Id,
+                        Code = s.Code,
+                        Barcode = s.Barcode,
+                        Description = s.Description,
+                        Name = s.Name,
+                        Price = s.Price,
+                        Quantity = s.Quantity
+                    }).ToList();
+                    var template = new XLTemplate(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "ProductListTemplate.xlsx"));
+                    template.AddVariable(productsModel);
+                    template.Generate();
+
+                    using (var stream = new MemoryStream())
+                    {
+                        template.Workbook.SaveAs(stream);
+                        excelBytes = stream.ToArray();
+                    }
+                }
+                return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Product.xlsx");
+            }
         }
     }
 }

@@ -7,18 +7,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200909105638_v3.cs" />
+    <Compile Remove="Migrations\20200909105638_v3.Designer.cs" />
+    <Compile Remove="Migrations\20200909110438_v3.cs" />
+    <Compile Remove="Migrations\20200909110438_v3.Designer.cs" />
+    <Compile Remove="Migrations\20200909114103_v1.cs" />
+    <Compile Remove="Migrations\20200909114103_v1.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Data\ProductListTemplate.xlsx" />
     <None Remove="Data\ProductTemplate.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Data\ProductListTemplate.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\ProductTemplate.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.3" />
     <PackageReference Include="ClosedXML.Report" Version="0.2.1" />
+    <PackageReference Include="linq2db" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7">
@@ -26,6 +40,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>  
 
 </Project>

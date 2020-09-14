@@ -1,9 +1,7 @@
-﻿using System;
+﻿using LinqToDB.Mapping;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace ClosedXML.Report.Sample.Models
 {
@@ -12,47 +10,51 @@ namespace ClosedXML.Report.Sample.Models
         /// <summary>
         /// รหัสสินค้าและบริการ
         /// </summary>
-        [Required]
-        [Column(name: "id")]
+        [Association(ThisKey = "Id", OtherKey = "Id")]
         public long Id { get; set; }
 
         /// <summary>
         /// ชื่อสินค้าและบริการ
         /// </summary>
-        [Required]
-        [Column(name: "name")]
+        [Association(ThisKey = "Name", OtherKey = "Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// โค้ดสินค้าและบริการ
         /// </summary>
-        [Column(name: "code")]
+        [Association(ThisKey = "Code", OtherKey = "Code")]
         public string Code { get; set; }
 
         /// <summary>
         /// บาร์โค้ดสินค้าและบริการ
         /// </summary>
-        [Column(name: "barcode")]
+        [Association(ThisKey = "Barcode", OtherKey = "Barcode")]
         public string Barcode { get; set; }
 
         /// <summary>
         /// ราคาสินค้าและบริการ
         /// </summary>
-        [Required]
-        [Column(name: "price")]
+        [Association(ThisKey = "Price", OtherKey = "Price")]
         public double Price { get; set; }
 
         /// <summary>
         /// รายละเอียดสินค้าและบริการ
         /// </summary>
-        [Column(name: "description")]
+        [Association(ThisKey = "Description", OtherKey = "Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// จำนวนสินค้าและบริการ
         /// </summary>
-        [Required]
-        [Column(name: "quantity")]
+        [Association(ThisKey = "Quantity", OtherKey = "Quantity")]
         public double Quantity { get; set; }
+    }
+
+    public class ProductsModel
+    {
+        /// <summary>
+        /// สินค้าและบริการ
+        public List<ProductModel> Item { get; set; }
+        
     }
 }

@@ -14,6 +14,7 @@
 }
 else
 {
+    <a class="form-control btn btn-info" href="/download" target="_blank">Export All</a>
     <table class="table">
         <thead>
             <tr>
@@ -33,7 +34,7 @@ else
                     <td>@product.Price</td>
                     <td>@product.Quantity</td>
                     <td>
-                        <a class="form-control btn btn-info" href="/download?id=@product.Id" target="_blank">Export excel</a>
+                        <a class="form-control btn btn-info" href="/download?id=@product.Id" target="_blank">Export</a>
                     </td>
                 </tr>
             }
