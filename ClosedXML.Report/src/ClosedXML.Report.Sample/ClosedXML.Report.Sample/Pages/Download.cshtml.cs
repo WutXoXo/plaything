@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ClosedXML.Report.Sample.Entities.Sqlite;
 using ClosedXML.Report.Sample.Models;
 using ClosedXML.Report.Sample.Services.Abstractions;
+using FastMember;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -58,7 +60,7 @@ namespace ClosedXML.Report.Sample.Pages
                 if (products != null && products.Count > 0)
                 {
                     ProductsModel productsModel = new ProductsModel();
-                    productsModel.Item = products.Select(s => new ProductModel()
+                    productsModel.Products = products.Select(s => new ProductModel()
                     {
                         Id = s.Id,
                         Code = s.Code,
@@ -68,8 +70,23 @@ namespace ClosedXML.Report.Sample.Pages
                         Price = s.Price,
                         Quantity = s.Quantity
                     }).ToList();
+
+                    DataTable table = new DataTable();
+                    using (var reader = ObjectReader.Create(productsModel.Products))
+                    {
+                        table.Load(reader);
+                    }
+
                     var template = new XLTemplate(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "ProductListTemplate.xlsx"));
                     template.AddVariable(productsModel);
+                    template.AddVariable("items", table);
+                    //template.AddVariable("Id", "Id");
+                    //template.AddVariable("Code", "Code");
+                    //template.AddVariable("Barcode", "Barcode");
+                    //template.AddVariable("Description", "Description");
+                    //template.AddVariable("Name", "Name");
+                    //template.AddVariable("Price", "Price");
+                    //template.AddVariable("Quantity", "Quantity");
                     template.Generate();
 
                     using (var stream = new MemoryStream())
