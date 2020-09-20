@@ -4,6 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Hangfire.Dashboard;
+using Hangfire.PostgreSql;
+using Hangfire.Sample.Services;
+using Hangfire.Sample.Services.Abstractions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -39,8 +43,9 @@ namespace Hangfire.Sample
         public void ConfigureServices(IServiceCollection services)
         {
             string document = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-
-            services.AddControllersWithViews();
+                        
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson();
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -51,6 +56,14 @@ namespace Hangfire.Sample
                 });
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, document));
             });
+            services.AddSwaggerGenNewtonsoftSupport();
+            services.AddHangfire(config => 
+            config.UsePostgreSqlStorage(Configuration.GetConnectionString("DefaultConnection"))
+            );
+
+            #region dependency injection service
+            services.AddScoped<IJobsService, JobsService>();
+            #endregion
         }
 
         /// <summary>
@@ -77,18 +90,24 @@ namespace Hangfire.Sample
 
             app.UseAuthorization();
 
+            app.UseSwagger();
+            app.UseSwaggerUI(options => {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Hangfire Sample Service");
+                options.RoutePrefix = "documents";
+            });
+
+            app.UseHangfireServer();
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions()
+            {
+                Authorization = new[] { new CustomAuthorizeFilter() }
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-
-            app.UseSwagger();
-            app.UseSwaggerUI(opt => {
-                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Hangfire Sample Service");
-                opt.RoutePrefix = "documents";
-            });
+            });           
         }
     }
 }
